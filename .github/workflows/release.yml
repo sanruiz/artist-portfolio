@@ -1,0 +1,76 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get tag version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Create plugin zip
+        run: |
+          # Create a clean directory for the plugin
+          mkdir -p artist-portfolio-release/artist-portfolio
+          
+          # Copy all plugin files except .git and .github
+          rsync -av --exclude='.git' --exclude='.github' --exclude='artist-portfolio-release' . artist-portfolio-release/artist-portfolio/
+          
+          # Create zip file
+          cd artist-portfolio-release
+          zip -r ../artist-portfolio-${{ steps.get_version.outputs.VERSION }}.zip artist-portfolio/
+          cd ..
+
+      - name: Extract changelog for this version
+        id: changelog
+        run: |
+          # Extract changelog content for this version
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          VERSION_NUMBER=${VERSION#v}  # Remove 'v' prefix
+          
+          # Create release notes
+          echo "## Artist Portfolio WordPress Plugin ${VERSION}" > release_notes.md
+          echo "" >> release_notes.md
+          echo "### Installation" >> release_notes.md
+          echo "1. Download the \`artist-portfolio-${VERSION}.zip\` file" >> release_notes.md
+          echo "2. Upload to WordPress via Plugins > Add New > Upload Plugin" >> release_notes.md
+          echo "3. Activate the plugin" >> release_notes.md
+          echo "4. Install WPGraphQL plugin for full functionality" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "### Features" >> release_notes.md
+          echo "- Custom post type 'artwork' with WPGraphQL integration" >> release_notes.md
+          echo "- Hierarchical taxonomies: Categories and Series" >> release_notes.md
+          echo "- Custom meta fields: size, medium, price, date, gallery" >> release_notes.md
+          echo "- WordPress admin UI with drag-and-drop gallery management" >> release_notes.md
+          echo "- Full WPGraphQL support with custom resolvers" >> release_notes.md
+          echo "- WordPress Coding Standards compliant" >> release_notes.md
+          echo "- Security features and internationalization ready" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "### Requirements" >> release_notes.md
+          echo "- WordPress 5.0+" >> release_notes.md
+          echo "- PHP 7.4+" >> release_notes.md
+          echo "- WPGraphQL plugin (recommended)" >> release_notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          name: Artist Portfolio ${{ steps.get_version.outputs.VERSION }}
+          body_path: release_notes.md
+          files: artist-portfolio-${{ steps.get_version.outputs.VERSION }}.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

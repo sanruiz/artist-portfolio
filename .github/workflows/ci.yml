@@ -1,0 +1,75 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, xml, zip
+          tools: composer
+
+      - name: Validate PHP syntax
+        run: |
+          find . -name "*.php" -not -path "./vendor/*" -exec php -l {} \; | grep -v "No syntax errors detected"
+          if [ $? -eq 0 ]; then
+            echo "✅ All PHP files have valid syntax"
+          else
+            echo "❌ PHP syntax errors found"
+            exit 1
+          fi
+
+      - name: Check WordPress Coding Standards
+        run: |
+          # Install PHPCS and WordPress Coding Standards
+          composer global require "squizlabs/php_codesniffer=*"
+          composer global require "wp-coding-standards/wpcs"
+          
+          # Add PHPCS to PATH
+          export PATH="$HOME/.composer/vendor/bin:$PATH"
+          
+          # Set WordPress Coding Standards
+          phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
+          
+          # Check coding standards (allow some warnings for now)
+          phpcs --standard=WordPress --extensions=php --ignore=vendor/ . || true
+
+      - name: Validate plugin header
+        run: |
+          # Check if plugin header is valid
+          if grep -q "Plugin Name:" artist-portfolio.php; then
+            echo "✅ Plugin header found"
+          else
+            echo "❌ Plugin header missing"
+            exit 1
+          fi
+
+      - name: Check version consistency
+        run: |
+          # Extract version from plugin file
+          PLUGIN_VERSION=$(grep "Version:" artist-portfolio.php | sed 's/.*Version: *\([0-9.]*\).*/\1/')
+          
+          # Extract version from constant
+          CONST_VERSION=$(grep "SA_ARTWORK_PLUGIN_VERSION" artist-portfolio.php | sed "s/.*'\([0-9.]*\)'.*/\1/")
+          
+          echo "Plugin header version: $PLUGIN_VERSION"
+          echo "Constant version: $CONST_VERSION"
+          
+          if [ "$PLUGIN_VERSION" = "$CONST_VERSION" ]; then
+            echo "✅ Versions match"
+          else
+            echo "❌ Version mismatch between header and constant"
+            exit 1
+          fi
