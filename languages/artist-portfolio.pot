@@ -1,0 +1,268 @@
+# Artist Portfolio WordPress Plugin
+# Copyright (C) 2024 Artist Portfolio
+# This file is distributed under the same license as the Artist Portfolio package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Artist Portfolio 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: artist-portfolio.php
+msgid "Artist Portfolio plugin requires WPGraphQL to be installed and activated for full functionality."
+msgstr ""
+
+#: includes/class-sa-artwork-post-type.php
+msgctxt "Post type general name"
+msgid "Artworks"
+msgstr ""
+
+msgctxt "Post type singular name"
+msgid "Artwork"
+msgstr ""
+
+msgctxt "Admin Menu text"
+msgid "Artworks"
+msgstr ""
+
+msgctxt "Add New on Toolbar"
+msgid "Artwork"
+msgstr ""
+
+msgid "Add New"
+msgstr ""
+
+msgid "Add New Artwork"
+msgstr ""
+
+msgid "New Artwork"
+msgstr ""
+
+msgid "Edit Artwork"
+msgstr ""
+
+msgid "View Artwork"
+msgstr ""
+
+msgid "All Artworks"
+msgstr ""
+
+msgid "Search Artworks"
+msgstr ""
+
+msgid "Parent Artworks:"
+msgstr ""
+
+msgid "No artworks found."
+msgstr ""
+
+msgid "No artworks found in Trash."
+msgstr ""
+
+#: includes/class-sa-artwork-taxonomies.php
+msgctxt "taxonomy general name"
+msgid "Artwork Categories"
+msgstr ""
+
+msgctxt "taxonomy singular name"
+msgid "Artwork Category"
+msgstr ""
+
+msgid "Search Artwork Categories"
+msgstr ""
+
+msgid "All Artwork Categories"
+msgstr ""
+
+msgid "Parent Artwork Category"
+msgstr ""
+
+msgid "Parent Artwork Category:"
+msgstr ""
+
+msgid "Edit Artwork Category"
+msgstr ""
+
+msgid "Update Artwork Category"
+msgstr ""
+
+msgid "Add New Artwork Category"
+msgstr ""
+
+msgid "New Artwork Category Name"
+msgstr ""
+
+msgid "Artwork Categories"
+msgstr ""
+
+msgctxt "taxonomy general name"
+msgid "Series"
+msgstr ""
+
+msgctxt "taxonomy singular name"
+msgid "Series"
+msgstr ""
+
+msgid "Search Series"
+msgstr ""
+
+msgid "All Series"
+msgstr ""
+
+msgid "Parent Series"
+msgstr ""
+
+msgid "Parent Series:"
+msgstr ""
+
+msgid "Edit Series"
+msgstr ""
+
+msgid "Update Series"
+msgstr ""
+
+msgid "Add New Series"
+msgstr ""
+
+msgid "New Series Name"
+msgstr ""
+
+#: includes/class-sa-artwork-meta-fields.php
+msgid "Artwork Details"
+msgstr ""
+
+msgid "Artwork Gallery"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "e.g., 24\" x 36\" or 61cm x 91cm"
+msgstr ""
+
+msgid "Medium"
+msgstr ""
+
+msgid "e.g., Oil on canvas, Digital, Watercolor"
+msgstr ""
+
+msgid "Price"
+msgstr ""
+
+msgid "e.g., $500.00 or Not for sale"
+msgstr ""
+
+msgid "Creation Date"
+msgstr ""
+
+msgid "Date when the artwork was created"
+msgstr ""
+
+msgid "Remove image"
+msgstr ""
+
+msgid "Add Images to Gallery"
+msgstr ""
+
+msgid "No images in gallery. Click \"Add Images to Gallery\" to get started."
+msgstr ""
+
+msgid "Not set"
+msgstr ""
+
+#: includes/class-sa-artwork-graphql.php
+msgid "The size/dimensions of the artwork"
+msgstr ""
+
+msgid "The medium used to create the artwork"
+msgstr ""
+
+msgid "The price of the artwork"
+msgstr ""
+
+msgid "The date when the artwork was created"
+msgstr ""
+
+msgid "Gallery images for the artwork"
+msgstr ""
+
+msgid "The permalink URL of the artwork"
+msgstr ""
+
+msgid "Whether the artwork is available for purchase"
+msgstr ""
+
+msgid "The formatted price of the artwork"
+msgstr ""
+
+msgid "Price on request"
+msgstr ""
+
+msgid "Parsed dimensions of the artwork"
+msgstr ""
+
+msgid "Artwork dimensions"
+msgstr ""
+
+msgid "Width of the artwork"
+msgstr ""
+
+msgid "Height of the artwork"
+msgstr ""
+
+msgid "Unit of measurement"
+msgstr ""
+
+msgid "Raw size string"
+msgstr ""
+
+#: includes/class-sa-artwork-admin.php
+msgid "GraphQL Query Examples"
+msgstr ""
+
+msgid "GraphQL Examples"
+msgstr ""
+
+msgid "These examples require the %s plugin to be installed and activated."
+msgstr ""
+
+msgid "Basic Artwork Query"
+msgstr ""
+
+msgid "Artwork with Dimensions"
+msgstr ""
+
+msgid "Filter by Category"
+msgstr ""
+
+msgid "Single Artwork"
+msgstr ""
+
+msgid "Available Artworks Only"
+msgstr ""
+
+msgid "Note:"
+msgstr ""
+
+msgid "Replace taxonomy and field values with actual values from your site. Use the WPGraphQL IDE (usually available at /graphql-ide) to test these queries."
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "Created"
+msgstr ""
+
+msgid "Gallery"
+msgstr ""
+
+msgid "%d image"
+msgid_plural "%d images"
+msgstr[0] ""
+msgstr[1] ""
