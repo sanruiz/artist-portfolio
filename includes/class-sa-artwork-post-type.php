@@ -90,7 +90,7 @@ class SA_Artwork_Post_Type {
 			'capability_type'    => 'post',
 			'has_archive'        => true,
 			'hierarchical'       => false,
-			'menu_position'      => null,
+			'menu_position'      => 20, // Below Pages
 			'menu_icon'          => 'dashicons-art',
 			'supports'           => array( 'title', 'editor', 'thumbnail' ),
 			'show_in_rest'       => true,

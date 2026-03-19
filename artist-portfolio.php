@@ -132,5 +132,28 @@ function sa_artwork_init() {
 	return SA_Artwork_Plugin::get_instance();
 }
 
+/**
+ * Plugin activation hook.
+ */
+function sa_artwork_activate() {
+	// Initialize the plugin to register post types and taxonomies.
+	sa_artwork_init();
+	
+	// Flush rewrite rules to ensure custom post type URLs work.
+	flush_rewrite_rules();
+}
+
+/**
+ * Plugin deactivation hook.
+ */
+function sa_artwork_deactivate() {
+	// Flush rewrite rules to clean up custom post type URLs.
+	flush_rewrite_rules();
+}
+
+// Register activation and deactivation hooks.
+register_activation_hook( __FILE__, 'sa_artwork_activate' );
+register_deactivation_hook( __FILE__, 'sa_artwork_deactivate' );
+
 // Start the plugin.
 sa_artwork_init();
