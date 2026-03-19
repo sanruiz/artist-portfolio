@@ -394,8 +394,12 @@ function sa_artwork_save_meta_box_data( $post_id ) {
 
 	// Save gallery
 	if (isset($_POST['sa_artwork_gallery'])) {
+		error_log('Gallery data received: ' . $_POST['sa_artwork_gallery']);
+		
 		$gallery_string = sanitize_text_field($_POST['sa_artwork_gallery']);
 		$gallery_ids = array_filter(array_map('intval', explode(',', $gallery_string)));
+		
+		error_log('Processed gallery IDs: ' . print_r($gallery_ids, true));
 
 		// Validate that all IDs are valid image attachments
 		$valid_ids = array();
@@ -405,13 +409,18 @@ function sa_artwork_save_meta_box_data( $post_id ) {
 			}
 		}
 
+		error_log('Valid gallery IDs: ' . print_r($valid_ids, true));
+
 		if (!empty($valid_ids)) {
-			update_post_meta($post_id, '_sa_artwork_gallery', $valid_ids);
+			$result = update_post_meta($post_id, '_sa_artwork_gallery', $valid_ids);
+			error_log('Gallery save result: ' . ($result ? 'success' : 'failed'));
 		} else {
 			delete_post_meta($post_id, '_sa_artwork_gallery');
+			error_log('Gallery deleted - no valid IDs');
 		}
 	} else {
 		delete_post_meta($post_id, '_sa_artwork_gallery');
+		error_log('No gallery data received - field deleted');
 	}
 }
 add_action( 'save_post', 'sa_artwork_save_meta_box_data' );
@@ -540,7 +549,9 @@ function sa_artwork_admin_scripts($hook)
 		
 		function updateGalleryInput() {
 			var ids = getGalleryIds();
+			console.log("Updating gallery input with IDs:", ids);
 			galleryInput.val(ids.join(","));
+			console.log("Gallery input value set to:", galleryInput.val());
 		}
 		
 		function getGalleryIds() {
