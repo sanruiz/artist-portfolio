@@ -3,7 +3,7 @@
  * Plugin Name: Artist Portfolio
  * Plugin URI: https://example.com/artist-portfolio
  * Description: A custom post type for artist portfolio with WPGraphQL integration.
- * Version: 1.0.1
+ * Version: 1.1.0
  * Author: Your Name
  * Author URI: https://example.com
  * Text Domain: artist-portfolio
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'SA_ARTWORK_PLUGIN_VERSION', '1.0.1' );
+define( 'SA_ARTWORK_PLUGIN_VERSION', '1.1.0' );
 define( 'SA_ARTWORK_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SA_ARTWORK_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 

@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.1.0] - 2026-03-19
+
+### Changed
+- Major refactor: Simplified plugin architecture by removing complex class structure
+- Consolidated all functionality into single main plugin file for better reliability
+- Improved plugin initialization and WordPress compatibility
+
+### Fixed
+- Resolved plugin activation issues where admin menu wasn't displaying consistently
+- Fixed class loading and initialization problems that caused plugin failures
+
+### Removed
+- Removed complex class-based structure in favor of simpler, more reliable approach
+- Cleaned up repository by removing test files and debug code
+
 ## [1.0.1] - 2026-03-19
 
 ### Fixed
