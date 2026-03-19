@@ -2,8 +2,14 @@
 
 ## [1.0.1] - 2026-03-19
 
+### Fixed
+- Fixed plugin activation issue where "Artworks" menu wasn't appearing in WordPress admin sidebar
+- Added proper activation/deactivation hooks to flush rewrite rules automatically
+- Set explicit menu position (20) for consistent placement in admin menu
+
 ### Changed
-- Version bump to 1.0.1
+- Improved plugin activation process for better user experience
+- Enhanced post type registration for more reliable admin menu display
 
 
 All notable changes to this project will be documented in this file.
