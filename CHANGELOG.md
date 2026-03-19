@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.2.0] - 2026-03-19
+
+### Added
+- **Multi-Image Gallery System**: Complete image gallery management for artworks
+- **Visual Gallery Interface**: Drag-and-drop image reordering with thumbnail previews
+- **WordPress Media Integration**: Direct integration with WordPress media library
+- **Gallery Meta Box**: Dedicated admin interface for managing artwork images
+- **WPGraphQL Gallery Field**: Full GraphQL support for querying gallery images
+- **Gallery Admin Columns**: Show gallery image count in artwork list view
+- **Interactive JavaScript**: Real-time gallery management with jQuery UI sortable
+
+### Enhanced
+- **Admin Experience**: Improved artwork editing with visual gallery management
+- **GraphQL API**: Extended with gallery field returning MediaItem objects
+- **User Interface**: Modern, responsive gallery grid with overlay controls
+- **File Validation**: Automatic validation of image attachments
+- **Data Persistence**: Robust saving and retrieval of gallery image order
+
+### Technical
+- **Media Library Integration**: Leverages WordPress native media handling
+- **Drag & Drop Reordering**: jQuery UI sortable implementation
+- **AJAX-like Interactions**: Seamless gallery updates without page reload
+- **Image Validation**: Ensures only valid image attachments are stored
+- **GraphQL Schema**: Proper MediaItem integration for headless applications
+
 ## [1.1.0] - 2026-03-19
 
 ### Changed

@@ -3,7 +3,7 @@
  * Plugin Name: Artist Portfolio
  * Plugin URI: https://github.com/sanruiz/artist-portfolio
  * Description: A custom post type for artist portfolio with WPGraphQL integration.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Santiago Ramirez
  * Text Domain: artist-portfolio
  * Domain Path: /languages
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'SA_ARTWORK_PLUGIN_VERSION', '1.1.0' );
+define( 'SA_ARTWORK_PLUGIN_VERSION', '1.2.0' );
 define( 'SA_ARTWORK_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SA_ARTWORK_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
@@ -154,6 +154,15 @@ function sa_artwork_add_meta_boxes() {
 		'normal',
 		'high'
 	);
+
+	add_meta_box(
+		'sa_artwork_gallery',
+		__('Artwork Gallery', 'artist-portfolio'),
+		'sa_artwork_gallery_meta_box_callback',
+		'artwork',
+		'normal',
+		'high'
+	);
 }
 add_action( 'add_meta_boxes', 'sa_artwork_add_meta_boxes' );
 
@@ -191,6 +200,166 @@ function sa_artwork_details_meta_box_callback( $post ) {
 }
 
 /**
+ * Gallery meta box callback function.
+ */
+function sa_artwork_gallery_meta_box_callback($post)
+{
+	$gallery_ids = get_post_meta($post->ID, '_sa_artwork_gallery', true);
+	if (!is_array($gallery_ids)) {
+		$gallery_ids = array();
+	}
+	?>
+		<div id="sa-artwork-gallery-container">
+			<input type="hidden" id="sa_artwork_gallery" name="sa_artwork_gallery" value="<?php echo esc_attr(implode(',', $gallery_ids)); ?>" />
+		
+			<div id="sa-gallery-images" class="sa-gallery-grid">
+				<?php if (empty($gallery_ids)): ?>
+						<div class="sa-gallery-empty">
+							<p><?php _e('No images in gallery. Click "Add Images to Gallery" to get started.', 'artist-portfolio'); ?></p>
+						</div>
+				<?php else: ?>
+						<?php foreach ($gallery_ids as $image_id): ?>
+								<?php if (wp_attachment_is_image($image_id)): ?>
+										<div class="sa-gallery-image" data-id="<?php echo esc_attr($image_id); ?>">
+											<div class="sa-image-preview">
+												<?php echo wp_get_attachment_image($image_id, 'thumbnail'); ?>
+												<div class="sa-image-overlay">
+													<button type="button" class="sa-remove-image" title="<?php esc_attr_e('Remove image', 'artist-portfolio'); ?>">×</button>
+													<span class="sa-drag-handle" title="<?php esc_attr_e('Drag to reorder', 'artist-portfolio'); ?>">⋮⋮</span>
+												</div>
+											</div>
+											<div class="sa-image-info">
+												<small><?php echo esc_html(basename(get_attached_file($image_id))); ?></small>
+											</div>
+										</div>
+								<?php endif; ?>
+						<?php endforeach; ?>
+				<?php endif; ?>
+			</div>
+
+			<div class="sa-gallery-actions">
+				<button type="button" id="sa-add-gallery-images" class="button button-primary">
+					<span class="dashicons dashicons-plus-alt"></span>
+					<?php _e('Add Images to Gallery', 'artist-portfolio'); ?>
+				</button>
+				<button type="button" id="sa-clear-gallery" class="button button-secondary" style="<?php echo empty($gallery_ids) ? 'display: none;' : ''; ?>">
+					<span class="dashicons dashicons-trash"></span>
+					<?php _e('Clear Gallery', 'artist-portfolio'); ?>
+				</button>
+			</div>
+		
+			<p class="description">
+				<?php _e('Upload and manage multiple images for this artwork. You can drag and drop to reorder images.', 'artist-portfolio'); ?>
+			</p>
+		</div>
+
+		<style>
+		.sa-gallery-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+			gap: 15px;
+			margin: 15px 0;
+			padding: 15px;
+			border: 2px dashed #ddd;
+			border-radius: 4px;
+			min-height: 100px;
+		}
+	
+		.sa-gallery-empty {
+			grid-column: 1 / -1;
+			text-align: center;
+			color: #666;
+			font-style: italic;
+		}
+	
+		.sa-gallery-image {
+			position: relative;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			overflow: hidden;
+			cursor: move;
+			transition: all 0.2s ease;
+		}
+	
+		.sa-gallery-image:hover {
+			border-color: #0073aa;
+			box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+		}
+	
+		.sa-image-preview {
+			position: relative;
+			aspect-ratio: 1;
+			overflow: hidden;
+		}
+	
+		.sa-image-preview img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
+	
+		.sa-image-overlay {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0,0,0,0.7);
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			padding: 5px;
+			opacity: 0;
+			transition: opacity 0.2s ease;
+		}
+	
+		.sa-gallery-image:hover .sa-image-overlay {
+			opacity: 1;
+		}
+	
+		.sa-remove-image {
+			background: #dc3232;
+			color: white;
+			border: none;
+			border-radius: 50%;
+			width: 24px;
+			height: 24px;
+			cursor: pointer;
+			font-size: 16px;
+			line-height: 1;
+		}
+	
+		.sa-drag-handle {
+			color: white;
+			font-size: 12px;
+			cursor: move;
+		}
+	
+		.sa-image-info {
+			padding: 5px;
+			background: #f9f9f9;
+			font-size: 11px;
+			text-align: center;
+		}
+	
+		.sa-gallery-actions {
+			margin-top: 10px;
+		}
+	
+		.sa-gallery-actions .button {
+			margin-right: 10px;
+		}
+	
+		.sa-gallery-grid.sortable-placeholder {
+			background: #f0f0f1;
+			border-style: solid;
+		}
+		</style>
+		<?php
+}
+
+/**
  * Save meta box data.
  */
 function sa_artwork_save_meta_box_data( $post_id ) {
@@ -222,8 +391,184 @@ function sa_artwork_save_meta_box_data( $post_id ) {
 	if ( isset( $_POST['sa_artwork_date'] ) ) {
 		update_post_meta( $post_id, '_sa_artwork_date', sanitize_text_field( $_POST['sa_artwork_date'] ) );
 	}
+
+	// Save gallery
+	if (isset($_POST['sa_artwork_gallery'])) {
+		$gallery_string = sanitize_text_field($_POST['sa_artwork_gallery']);
+		$gallery_ids = array_filter(array_map('intval', explode(',', $gallery_string)));
+
+		// Validate that all IDs are valid image attachments
+		$valid_ids = array();
+		foreach ($gallery_ids as $id) {
+			if (wp_attachment_is_image($id)) {
+				$valid_ids[] = $id;
+			}
+		}
+
+		if (!empty($valid_ids)) {
+			update_post_meta($post_id, '_sa_artwork_gallery', $valid_ids);
+		} else {
+			delete_post_meta($post_id, '_sa_artwork_gallery');
+		}
+	} else {
+		delete_post_meta($post_id, '_sa_artwork_gallery');
+	}
 }
 add_action( 'save_post', 'sa_artwork_save_meta_box_data' );
+
+/**
+ * Enqueue admin scripts and styles for gallery functionality.
+ */
+function sa_artwork_admin_scripts($hook)
+{
+	global $post;
+
+	if (!in_array($hook, array('post.php', 'post-new.php'))) {
+		return;
+	}
+
+	if (!$post || 'artwork' !== $post->post_type) {
+		return;
+	}
+
+	// Enqueue media uploader
+	wp_enqueue_media();
+
+	// Enqueue jQuery UI for sortable
+	wp_enqueue_script('jquery-ui-sortable');
+
+	// Add custom JavaScript
+	wp_add_inline_script('jquery', '
+	jQuery(document).ready(function($) {
+		var galleryFrame;
+		var galleryContainer = $("#sa-gallery-images");
+		var galleryInput = $("#sa_artwork_gallery");
+		var clearButton = $("#sa-clear-gallery");
+		
+		// Make gallery sortable
+		galleryContainer.sortable({
+			items: ".sa-gallery-image",
+			placeholder: "sortable-placeholder",
+			update: function() {
+				updateGalleryInput();
+			}
+		});
+		
+		// Add images button
+		$("#sa-add-gallery-images").on("click", function(e) {
+			e.preventDefault();
+			
+			if (galleryFrame) {
+				galleryFrame.open();
+				return;
+			}
+			
+			galleryFrame = wp.media({
+				title: "Select Images for Gallery",
+				button: { text: "Add to Gallery" },
+				multiple: true,
+				library: { type: "image" }
+			});
+			
+			galleryFrame.on("select", function() {
+				var selection = galleryFrame.state().get("selection");
+				var existingIds = getGalleryIds();
+				
+				selection.map(function(attachment) {
+					var attachmentId = attachment.id;
+					
+					// Skip if already in gallery
+					if (existingIds.indexOf(attachmentId) !== -1) {
+						return;
+					}
+					
+					var imageHtml = createImageElement(attachment.toJSON());
+					galleryContainer.append(imageHtml);
+				});
+				
+				updateGalleryInput();
+				toggleEmptyState();
+				clearButton.show();
+			});
+			
+			galleryFrame.open();
+		});
+		
+		// Remove image
+		$(document).on("click", ".sa-remove-image", function(e) {
+			e.preventDefault();
+			$(this).closest(".sa-gallery-image").remove();
+			updateGalleryInput();
+			toggleEmptyState();
+			
+			if (getGalleryIds().length === 0) {
+				clearButton.hide();
+			}
+		});
+		
+		// Clear gallery
+		clearButton.on("click", function(e) {
+			e.preventDefault();
+			if (confirm("Are you sure you want to remove all images from the gallery?")) {
+				galleryContainer.empty();
+				galleryInput.val("");
+				toggleEmptyState();
+				clearButton.hide();
+			}
+		});
+		
+		function createImageElement(attachment) {
+			var thumbnail = attachment.sizes && attachment.sizes.thumbnail 
+				? attachment.sizes.thumbnail.url 
+				: attachment.url;
+				
+			return $(`
+				<div class="sa-gallery-image" data-id="${attachment.id}">
+					<div class="sa-image-preview">
+						<img src="${thumbnail}" alt="${attachment.alt}" />
+						<div class="sa-image-overlay">
+							<button type="button" class="sa-remove-image" title="Remove image">×</button>
+							<span class="sa-drag-handle" title="Drag to reorder">⋮⋮</span>
+						</div>
+					</div>
+					<div class="sa-image-info">
+						<small>${attachment.filename}</small>
+					</div>
+				</div>
+			`);
+		}
+		
+		function updateGalleryInput() {
+			var ids = getGalleryIds();
+			galleryInput.val(ids.join(","));
+		}
+		
+		function getGalleryIds() {
+			var ids = [];
+			galleryContainer.find(".sa-gallery-image").each(function() {
+				ids.push($(this).data("id"));
+			});
+			return ids;
+		}
+		
+		function toggleEmptyState() {
+			var emptyMessage = galleryContainer.find(".sa-gallery-empty");
+			var hasImages = galleryContainer.find(".sa-gallery-image").length > 0;
+			
+			if (hasImages && emptyMessage.length > 0) {
+				emptyMessage.remove();
+			} else if (!hasImages && emptyMessage.length === 0) {
+				galleryContainer.append(`
+					<div class="sa-gallery-empty">
+						<p>No images in gallery. Click "Add Images to Gallery" to get started.</p>
+					</div>
+				`);
+			}
+		}
+	});
+	');
+}
+add_action('admin_enqueue_scripts', 'sa_artwork_admin_scripts');
 
 /**
  * Add WPGraphQL fields.
@@ -269,6 +614,26 @@ function sa_artwork_register_graphql_fields() {
 				}
 			}
 			return $date;
+		}
+	));
+
+	register_graphql_field('Artwork', 'gallery', array(
+		'type' => array('list_of' => 'MediaItem'),
+		'description' => __('Gallery images for the artwork', 'artist-portfolio'),
+		'resolve' => function ($post) {
+			$gallery_ids = get_post_meta($post->ID, '_sa_artwork_gallery', true);
+			if (!is_array($gallery_ids) || empty($gallery_ids)) {
+				return array();
+			}
+
+			$images = array();
+			foreach ($gallery_ids as $image_id) {
+				if (wp_attachment_is_image($image_id)) {
+					$images[] = \WPGraphQL\Data\DataSource::resolve_post_object($image_id, 'attachment');
+				}
+			}
+
+			return array_filter($images);
 		}
 	));
 }
