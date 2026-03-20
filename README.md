@@ -8,28 +8,31 @@ A comprehensive WordPress plugin that creates a custom post type for artist port
 - **Hierarchical Taxonomies**: 
   - Artwork Categories (e.g., Digital Illustration, Print, Sculpture, Painting)
   - Series (for grouping artworks within categories)
-- **Custom Meta Fields**:
+- **Custom Meta Fields** (via ACF PRO):
   - Size/dimensions
   - Medium
   - Price
   - Creation date
-  - Gallery (multiple images)
+  - Gallery (multiple images with drag-and-drop reordering)
 - **Full WPGraphQL Integration**: All data exposed via GraphQL
-- **WordPress Admin UI**: User-friendly meta boxes with media uploader
+- **WordPress Admin UI**: ACF-powered interface with media uploader
 - **WordPress Coding Standards**: Clean, secure, and well-documented code
 
 ## Requirements
 
 - WordPress 5.0+
 - PHP 7.4+
+- [ACF PRO](https://www.advancedcustomfields.com/pro/) (for gallery and custom fields)
 - [WPGraphQL](https://wordpress.org/plugins/wp-graphql/) plugin (for GraphQL functionality)
+- [WPGraphQL for ACF](https://github.com/wp-graphql/wpgraphql-acf) (optional, for automatic ACF field exposure)
 
 ## Installation
 
 1. Download or clone this repository
 2. Upload the `artist-portfolio` folder to your `/wp-content/plugins/` directory
 3. Activate the plugin through the 'Plugins' menu in WordPress
-4. Install and activate the WPGraphQL plugin for full functionality
+4. Install and activate ACF PRO for the gallery functionality
+5. Install and activate WPGraphQL for GraphQL support
 
 ## Usage
 
@@ -39,37 +42,49 @@ A comprehensive WordPress plugin that creates a custom post type for artist port
 2. Fill in the artwork title and description
 3. Set a featured image
 4. Fill in the artwork details (size, medium, price, creation date)
-5. Add gallery images using the media uploader
+5. Add gallery images using ACF's gallery field (drag-and-drop to reorder)
 6. Assign categories and series as needed
 
 ### GraphQL Queries
 
-Visit **Artworks > GraphQL Examples** in your admin for complete query examples.
-
-#### Basic Query
+#### Get All Artworks
 
 ```graphql
 query GetArtworks {
   artworks {
     nodes {
+      id
+      databaseId
       title
+      slug
       content
       size
       medium
       price
-      date
-      gallery {
+      artworkDate
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+        }
+      }
+      galleryImages {
+        id
         sourceUrl
         altText
+        title
+        srcSet
       }
       artworkCategories {
         nodes {
           name
+          slug
         }
       }
-      seriesItems {
+      artworkSeries {
         nodes {
           name
+          slug
         }
       }
     }
@@ -77,7 +92,35 @@ query GetArtworks {
 }
 ```
 
-#### Single Artwork
+#### Single Artwork by Slug
+
+```graphql
+query GetArtwork($slug: ID!) {
+  artwork(id: $slug, idType: SLUG) {
+    title
+    content
+    size
+    medium
+    price
+    artworkDate
+    featuredImage {
+      node {
+        sourceUrl
+      }
+    }
+    galleryImages {
+      sourceUrl
+      altText
+      srcSet
+    }
+    artworkCategories {
+      nodes {
+        name
+      }
+    }
+  }
+}
+```
 
 ```graphql
 query GetSingleArtwork($id: ID!) {

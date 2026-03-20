@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.3.0] - 2026-03-19
+
+### Changed
+- **ACF PRO Integration**: Migrated all custom fields to ACF PRO for better reliability
+- **Gallery Field**: Now uses ACF PRO's native gallery field with drag-and-drop
+- **Simplified Architecture**: Removed custom meta box code in favor of ACF
+
+### Added
+- **ACF Field Registration**: Programmatic field registration via `acf_add_local_field_group()`
+- **Custom GraphQL Type**: `ArtworkGalleryImage` type with full image data
+- **Gallery Images Field**: `galleryImages` GraphQL field with sourceUrl, altText, srcSet
+- **WPGraphQL ACF Support**: Enabled `show_in_graphql` for all ACF fields
+
+### Fixed
+- **Gallery Persistence**: Resolved issue where gallery images weren't saving in Gutenberg
+- **GraphQL Resolver**: Fixed gallery field returning null values
+
+### Technical
+- ACF PRO handles all meta field saving automatically
+- Custom `ArtworkGalleryImage` GraphQL type for proper image data resolution
+- Simplified plugin from 800+ lines to ~380 lines
+
 ## [1.2.0] - 2026-03-19
 
 ### Added
@@ -8,46 +30,32 @@
 - **WordPress Media Integration**: Direct integration with WordPress media library
 - **Gallery Meta Box**: Dedicated admin interface for managing artwork images
 - **WPGraphQL Gallery Field**: Full GraphQL support for querying gallery images
-- **Gallery Admin Columns**: Show gallery image count in artwork list view
-- **Interactive JavaScript**: Real-time gallery management with jQuery UI sortable
-
-### Enhanced
-- **Admin Experience**: Improved artwork editing with visual gallery management
-- **GraphQL API**: Extended with gallery field returning MediaItem objects
-- **User Interface**: Modern, responsive gallery grid with overlay controls
-- **File Validation**: Automatic validation of image attachments
-- **Data Persistence**: Robust saving and retrieval of gallery image order
-
-### Technical
-- **Media Library Integration**: Leverages WordPress native media handling
-- **Drag & Drop Reordering**: jQuery UI sortable implementation
-- **AJAX-like Interactions**: Seamless gallery updates without page reload
-- **Image Validation**: Ensures only valid image attachments are stored
-- **GraphQL Schema**: Proper MediaItem integration for headless applications
 
 ## [1.1.0] - 2026-03-19
 
 ### Changed
-- Major refactor: Simplified plugin architecture by removing complex class structure
-- Consolidated all functionality into single main plugin file for better reliability
-- Improved plugin initialization and WordPress compatibility
+- Major refactor: Simplified plugin architecture
+- Consolidated all functionality into single main plugin file
 
 ### Fixed
-- Resolved plugin activation issues where admin menu wasn't displaying consistently
-- Fixed class loading and initialization problems that caused plugin failures
-
-### Removed
-- Removed complex class-based structure in favor of simpler, more reliable approach
-- Cleaned up repository by removing test files and debug code
+- Resolved plugin activation issues
+- Fixed class loading and initialization problems
 
 ## [1.0.1] - 2026-03-19
 
 ### Fixed
-- Fixed plugin activation issue where "Artworks" menu wasn't appearing in WordPress admin sidebar
-- Added proper activation/deactivation hooks to flush rewrite rules automatically
-- Set explicit menu position (20) for consistent placement in admin menu
+- Fixed plugin activation issue where menu wasn't appearing
+- Added proper activation/deactivation hooks
 
-### Changed
+## [1.0.0] - 2026-03-19
+
+### Added
+- Initial release
+- Custom post type `artwork` with title, editor, and thumbnail support
+- Hierarchical taxonomies: Artwork Categories and Series
+- Custom meta fields: size, medium, price, date, gallery
+- Full WPGraphQL integration
+- WordPress admin UI with meta boxes
 - Improved plugin activation process for better user experience
 - Enhanced post type registration for more reliable admin menu display
 
